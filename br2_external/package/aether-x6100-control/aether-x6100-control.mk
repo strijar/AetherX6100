@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-AETHER_X6100_CONTROL_VERSION = 8f7fe65264fdc762f75da7faa4a17560cea89538
+AETHER_X6100_CONTROL_VERSION = v0.9.0
 AETHER_X6100_CONTROL_SOURCE = $(AETHER_X6100_CONTROL_VERSION).tar.gz
 AETHER_X6100_CONTROL_SITE = https://github.com/AetherRadio/X6100Control/archive
 AETHER_X6100_CONTROL_LICENSE = GPLv2
