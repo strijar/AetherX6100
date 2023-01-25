@@ -1,0 +1,26 @@
+#!/bin/sh
+
+start() {
+    mount /dev/mmcblk0p1 /mnt
+    cd /
+
+    for i in /mnt/x6100_r1cbu_*.tgz ;do
+        [ ! -f "$i" ] && continue
+
+        echo "Update from $i"
+        zcat $i | tar -x
+        rm $i
+    done
+
+    umount /mnt
+}
+
+case "$1" in
+    start)
+        start;;
+    stop)
+        ;;
+    *)
+        echo "Usage: $0 {start}"
+    exit 1
+esac
