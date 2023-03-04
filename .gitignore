@@ -1,4 +1,4 @@
-build/
+build*/
 buildroot-*/
 buildroot-*.tar.gz
 sdcard.img
