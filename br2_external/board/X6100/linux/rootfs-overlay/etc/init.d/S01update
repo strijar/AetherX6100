@@ -1,7 +1,6 @@
 #!/bin/sh
 
 start() {
-    mount /dev/mmcblk0p1 /mnt
     cd /
 
     for i in /mnt/x6100_r1cbu_*.tgz ;do
@@ -11,8 +10,6 @@ start() {
         zcat $i | tar -x
         rm $i
     done
-
-    umount /mnt
 }
 
 case "$1" in
