@@ -413,15 +413,15 @@ diff -Naur orig/drivers/gpu/drm/panel/panel-jinglitai-jlt4013a.c my/drivers/gpu/
 +}
 +
 +static const struct drm_display_mode jlt4013a_default_display_mode = {
-+	.clock = 27000,
-+	.hdisplay = 480,
-+	.hsync_start = 480 + 32, // 512
-+	.hsync_end = 480 + 32 + 11, // 523
-+	.htotal = 480 + 32 + 11 + 2, // 525
-+	.vdisplay = 800,
-+	.vsync_start = 800 + 54, // 854
-+	.vsync_end = 800 + 54 + 41, // 895
-+	.vtotal = 800 + 54 + 41 + 33, // 928
++	.clock = 27500,                 /* pclk_khz */
++	.hdisplay = 480,                /* x */
++	.hsync_start = 480 + 38,        /* x + ri */
++	.hsync_end = 480 + 38 + 12,     /* x + ri + hs */
++	.htotal = 480 + 38 + 12 + 12,   /* x + ri + hs + le */
++	.vdisplay = 800,                /* y */
++	.vsync_start = 800 + 18,        /* y + lo */
++	.vsync_end = 800 + 18 + 8,      /* y + lo + vs */
++	.vtotal = 800 + 18 + 18 + 4,    /* y + lo + vs + up */
 +	.width_mm = 52,
 +	.height_mm = 86,
 +};
