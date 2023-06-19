@@ -209,8 +209,23 @@
 };
 
 &i2c0 {
-	clock-frequency = <1000000>;
-	status = "okay";
+    status = "okay";
+
+    compatible = "i2c-gpio";
+    scl-gpios = <&pio 7 2 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+    sda-gpios = <&pio 7 3 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+    i2c-gpio,sda-open-drain;
+    i2c-gpio,scl-open-drain;
+    i2c-gpio,delay-us = <2>;
+
+    /delete-property/ reg;
+    /delete-property/ interrupts;
+    /delete-property/ clocks;
+    /delete-property/ resets;
+};
+
+&i2c0_pins {
+    function = "gpio_out";
 };
 
 &i2c1 {
