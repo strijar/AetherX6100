@@ -231,6 +231,18 @@
 &i2c1 {
 	status = "okay";
 
+    compatible = "i2c-gpio";
+    scl-gpios = <&pio 7 4 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+    sda-gpios = <&pio 7 5 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
+    i2c-gpio,sda-open-drain;
+    i2c-gpio,scl-open-drain;
+    i2c-gpio,delay-us = <2>;
+
+    /delete-property/ reg;
+    /delete-property/ interrupts;
+    /delete-property/ clocks;
+    /delete-property/ resets;
+
 	rtc@51 {
 		compatible = "nxp,pcf8563";
 		reg = <0x51>;
@@ -239,6 +251,10 @@
 		interrupt-names = "irq";
 		irq-gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>;
 	};
+};
+
+&i2c1_pins {
+    function = "gpio_out";
 };
 
 &mali {
