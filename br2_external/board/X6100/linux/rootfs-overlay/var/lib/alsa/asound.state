@@ -2,8 +2,8 @@ state.sun8ia33audio {
 	control.1 {
 		iface MIXER
 		name 'AIF1 AD0 Capture Volume'
-		value.0 164
-		value.1 164
+		value.0 160
+		value.1 160
 		comment {
 			access 'read write'
 			type INTEGER
@@ -11,8 +11,8 @@ state.sun8ia33audio {
 			range '0 - 192'
 			dbmin -9999999
 			dbmax 2400
-			dbvalue.0 300
-			dbvalue.1 300
+			dbvalue.0 0
+			dbvalue.1 0
 		}
 	}
 	control.2 {
@@ -66,8 +66,8 @@ state.sun8ia33audio {
 	control.5 {
 		iface MIXER
 		name 'ADC Capture Volume'
-		value.0 186
-		value.1 186
+		value.0 160
+		value.1 160
 		comment {
 			access 'read write'
 			type INTEGER
@@ -75,8 +75,8 @@ state.sun8ia33audio {
 			range '0 - 192'
 			dbmin -9999999
 			dbmax 2400
-			dbvalue.0 1950
-			dbvalue.1 1950
+			dbvalue.0 0
+			dbvalue.1 0
 		}
 	}
 	control.6 {
@@ -137,7 +137,7 @@ state.sun8ia33audio {
 	control.10 {
 		iface MIXER
 		name 'Mic2 Playback Volume'
-		value 0
+		value 3
 		comment {
 			access 'read write'
 			type INTEGER
@@ -145,7 +145,7 @@ state.sun8ia33audio {
 			range '0 - 7'
 			dbmin -450
 			dbmax 600
-			dbvalue.0 -450
+			dbvalue.0 0
 		}
 	}
 	control.11 {
@@ -165,7 +165,7 @@ state.sun8ia33audio {
 	control.12 {
 		iface MIXER
 		name 'Mic1 Playback Volume'
-		value 0
+		value 7
 		comment {
 			access 'read write'
 			type INTEGER
@@ -173,7 +173,7 @@ state.sun8ia33audio {
 			range '0 - 7'
 			dbmin -450
 			dbmax 600
-			dbvalue.0 -450
+			dbvalue.0 600
 		}
 	}
 	control.13 {
@@ -193,7 +193,7 @@ state.sun8ia33audio {
 	control.14 {
 		iface MIXER
 		name 'ADC Gain Capture Volume'
-		value 5
+		value 3
 		comment {
 			access 'read write'
 			type INTEGER
@@ -201,7 +201,7 @@ state.sun8ia33audio {
 			range '0 - 7'
 			dbmin -450
 			dbmax 600
-			dbvalue.0 300
+			dbvalue.0 0
 		}
 	}
 	control.15 {
