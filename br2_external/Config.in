@@ -1,2 +1,3 @@
 source "$BR2_EXTERNAL_X6100_PATH/package/panel-jinglitai-jlt4013a/Config.in"
 source "$BR2_EXTERNAL_X6100_PATH/package/aether-x6100-control/Config.in"
+source "$BR2_EXTERNAL_X6100_PATH/package/rhvoice/Config.in"

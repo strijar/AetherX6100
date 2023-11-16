@@ -1,0 +1,17 @@
+config BR2_PACKAGE_RHVOICE
+	bool "RHVoice"
+	help
+	  RHVoice is a free and open-source speech synthesizer.
+
+	  Initially, RHVoice could speak only Russian. Now it also supports:
+
+	  * American and Scottish English
+	  * Brazilian Portuguese
+	  * Esperanto
+	  * Georgian
+	  * Ukrainian
+	  * Kyrgyz
+	  * Tatar
+	  * Macedonian
+	  * Albanian
+	  * Polish
