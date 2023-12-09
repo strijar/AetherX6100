@@ -1,0 +1,46 @@
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/share/support"
+export XGRADIO_TMPDIR="/usr/tmp/xgradio"
+
+if [ "$PS1" ]; then
+	if [ "`id -u`" -eq 0 ]; then
+		export PS1='[\u@\h:$PWD]# '
+	else
+		export PS1='[\u@\h:$PWD]$ '
+	fi
+fi
+
+export PAGER='/bin/less'
+export EDITOR='/usr/bin/mcedit'
+
+# Source configuration files from /etc/profile.d
+for i in /etc/profile.d/*.sh ; do
+	if [ -r "$i" ]; then
+		. $i
+	fi
+done
+unset i
+
+# I don't know how to change the default DPI
+# this physical size barely works
+export QT_QPA_EGLFS_PHYSICAL_WIDTH=78
+export QT_QPA_EGLFS_PHYSICAL_HEIGHT=130
+
+# we use ATOMIC functions here
+export QT_QPA_EGLFS_KMS_ATOMIC=1
+
+# egl screen rotation 
+export QT_QPA_EGLFS_ROTATION=90
+
+# eglfs_kms config files
+export QT_QPA_EGLFS_KMS_CONFIG=/etc/qtkmsconfig.json
+
+# eglfs input devices config
+# export QT_QPA_GENERIC_PLUGINS=libinput
+# export QT_QPA_EVDEV_KEYBOARD_PARAMETERS=grab=1
+# export QT_QPA_EVDEV_MOUSE_PARAMETERS=grab=1
+# export QT_QPA_EGLFS_NO_LIBINPUT=1
+
+export QT_QPA_PLATFORM=eglfs
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/qt/plugins
+export QT_QPA_FONTDIR=/usr/share/fonts
+export XDG_RUNTIME_DIR=/tmp
