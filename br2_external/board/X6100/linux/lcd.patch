@@ -90,6 +90,21 @@ diff -Naur orig/drivers/gpu/drm/panel/panel-jinglitai-jlt4013a.c my/drivers/gpu/
 +};
 +MODULE_DEVICE_TABLE(of, jlt4013a_of_match);
 +
++static const struct drm_display_mode jlt4013a_default_display_mode = {
++	.clock = 27500,
++ 	.hdisplay = 480,                /* x */
++ 	.hsync_start = 480 + 38,        /* x + ri */
++ 	.hsync_end = 480 + 38 + 12,     /* x + ri + hs */
++ 	.htotal = 480 + 38 + 12 + 12,   /* x + ri + hs + le */
++ 	.vdisplay = 800,                /* y */
++ 	.vsync_start = 800 + 18,        /* y + lo */
++ 	.vsync_end = 800 + 18 + 8,      /* y + lo + vs */
++ 	.vtotal = 800 + 18 + 8 + 17,    /* y + lo + vs + up */
++	.width_mm = 52,
++	.height_mm = 86,
++};
++
++
 +struct jlt4013a {
 +	struct drm_panel panel;
 +	struct spi_device *spi;
@@ -115,6 +130,8 @@ diff -Naur orig/drivers/gpu/drm/panel/panel-jinglitai-jlt4013a.c my/drivers/gpu/
 +
 +static int st7701s_write_command(struct jlt4013a *ctx, u8 cmd)
 +{
++	pr_info("Jinglitai JLT4013A: Writing SPI command with value %x\n", cmd);
++
 +	gpiod_set_value(ctx->dcx, 0);
 +
 +	return st7701s_spi_write(ctx, cmd);
@@ -122,6 +139,8 @@ diff -Naur orig/drivers/gpu/drm/panel/panel-jinglitai-jlt4013a.c my/drivers/gpu/
 +
 +static int st7701s_write_data(struct jlt4013a *ctx, u8 cmd)
 +{
++	pr_info("Jinglitai JLT4013A: Writing SPI data with value %x\n", cmd);
++
 +	gpiod_set_value(ctx->dcx, 1);
 +
 +	return st7701s_spi_write(ctx, cmd);
@@ -172,12 +191,25 @@ diff -Naur orig/drivers/gpu/drm/panel/panel-jinglitai-jlt4013a.c my/drivers/gpu/
 +	ST7701S_TRY(ret, st7701s_write_data(ctx, 0x10));
 +
 +	ST7701S_TRY(ret, st7701s_write_command(ctx, ST7701S_PORCTRL));
-+	ST7701S_TRY(ret, st7701s_write_data(ctx, 0x11));
-+	ST7701S_TRY(ret, st7701s_write_data(ctx, 0x02));
++	ST7701S_TRY(ret, st7701s_write_data(ctx,
++		jlt4013a_default_display_mode.vtotal
++		- jlt4013a_default_display_mode.vsync_end));  // mode.vtotal - mode.vsync_end
++	ST7701S_TRY(ret, st7701s_write_data(ctx,
++		jlt4013a_default_display_mode.vsync_start
++		- jlt4013a_default_display_mode.vdisplay));  // mode.vsync_start - mode.vdisplay
 +
 +	ST7701S_TRY(ret, st7701s_write_command(ctx, ST7701S_INVSET));
 +	ST7701S_TRY(ret, st7701s_write_data(ctx, 0x31));
 +	ST7701S_TRY(ret, st7701s_write_data(ctx, 0x03));
++
++	ST7701S_TRY(ret, st7701s_write_command(ctx, 0xC3));
++	ST7701S_TRY(ret, st7701s_write_data(ctx, 0x02));  // DataPolarity: negative (The data is input on the negative edge of DOTCLK)
++	ST7701S_TRY(ret, st7701s_write_data(ctx,
++		jlt4013a_default_display_mode.htotal
++		- jlt4013a_default_display_mode.hsync_end));  // HBP = mode.htotal - mode.hsync_end
++	ST7701S_TRY(ret, st7701s_write_data(ctx,
++		jlt4013a_default_display_mode.vsync_start
++		- jlt4013a_default_display_mode.vdisplay));  // VBP = mode.vsync_start - mode.vdisplay
 +
 +	/* Something strange */
 +
@@ -412,24 +444,13 @@ diff -Naur orig/drivers/gpu/drm/panel/panel-jinglitai-jlt4013a.c my/drivers/gpu/
 +	return ret;
 +}
 +
-+static const struct drm_display_mode jlt4013a_default_display_mode = {
-+	.clock = 27500,                 /* pclk_khz */
-+	.hdisplay = 480,                /* x */
-+	.hsync_start = 480 + 38,        /* x + ri */
-+	.hsync_end = 480 + 38 + 12,     /* x + ri + hs */
-+	.htotal = 480 + 38 + 12 + 12,   /* x + ri + hs + le */
-+	.vdisplay = 800,                /* y */
-+	.vsync_start = 800 + 18,        /* y + lo */
-+	.vsync_end = 800 + 18 + 8,      /* y + lo + vs */
-+	.vtotal = 800 + 18 + 18 + 4,    /* y + lo + vs + up */
-+	.width_mm = 52,
-+	.height_mm = 86,
-+};
 +
 +static int jlt4013a_get_modes(struct drm_panel *panel,
 +			      struct drm_connector *connector)
 +{
 +	static const u32 bus_format = MEDIA_BUS_FMT_RGB888_1X24;
++	static const u32 bus_flags = DRM_BUS_FLAG_PIXDATA_SAMPLE_NEGEDGE;
++
 +
 +	struct drm_display_mode *mode = drm_mode_duplicate(
 +		connector->dev, &jlt4013a_default_display_mode);
@@ -446,7 +467,7 @@ diff -Naur orig/drivers/gpu/drm/panel/panel-jinglitai-jlt4013a.c my/drivers/gpu/
 +	connector->display_info.width_mm = mode->width_mm;
 +	connector->display_info.height_mm = mode->height_mm;
 +	connector->display_info.bpc = 8;
-+	connector->display_info.bus_flags = DRM_BUS_FLAG_PIXDATA_DRIVE_POSEDGE;
++	connector->display_info.bus_flags = bus_flags;
 +
 +	drm_mode_probed_add(connector, mode);
 +
